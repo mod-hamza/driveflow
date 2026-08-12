@@ -12,7 +12,7 @@ class EstatePropertyOffer(models.Model):
 
     _check_price = models.Constraint("CHECK(price > 0)", "Offer price must be strictly positive.")
     property_type_id = fields.Many2one("estate.property.type", related="property_id.property_type_id", store=True)
-
+    
     def accept_offer(self):
         for record in self:
             if record.property_id.state == 'offer_accepted':
