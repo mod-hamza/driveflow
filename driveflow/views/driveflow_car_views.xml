@@ -2,7 +2,7 @@
     <record id="driveflow_car_action" model="ir.actions.act_window">
         <field name="name">DriveFlow Cars</field>
         <field name="res_model">driveflow.car</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">list,form,kanban</field>
     </record>
 
     <record id="driveflow_car_view_form" model="ir.ui.view">
@@ -17,7 +17,7 @@
                         </button>
                     </div>-->
                     <h1>
-                        <field name="name"/>
+                        <field name = "name"/>
                         <field name = "car_type_id"/>
                         <field name = "rental_rate"/>
                     </h1>
@@ -31,15 +31,33 @@
         <field name="model">driveflow.car</field>
         <field name="arch" type="xml">
             <list>
-                <field name="name"/>
+                <field name = "name"/>
                 <field name = "car_type_id"/>
                 <field name = "rental_rate"/>
                 <field name = "agreement_count"/>
-                <button name="action_car_maintainance" string="Put in Maintainance" type="object" />
-                <button name="action_car_available" string="Make Available" type="object" />
+                <button name = "action_car_maintainance" string="Put in Maintainance" type="object" />
+                <button name = "action_car_available" string="Make Available" type="object" />
                 <field name = "status" /> <!-- "Free", "Rented", "In Maintenance"-->
             </list>
         </field>
     </record>
 
+     <record id="driveflow_car_view_kanban" model="ir.ui.view">
+        <field name="name">driveflow.car.kanban</field>
+        <field name="model">driveflow.car</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="status">
+                <field name="name"/>
+                <field name="status"/>
+                <templates>
+                    <t t-name="card">
+                        <field name = "name"/>
+                        <field name = "car_type_id"/>
+                        <field name = "status"/>
+                        <field name = "rental_rate"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
 </odoo>

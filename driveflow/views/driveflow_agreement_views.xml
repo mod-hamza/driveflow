@@ -28,12 +28,13 @@
                 <sheet>
                     <h1>
                         <!--<field name ="name"/>-->
-                        <field name = "customer_id"/>
+                        <field name = "customer_id" string = "Customer Name" />
                     </h1>
                     <group>
-                        <field name ="car_id"/>
-                        <field name ="date_start"/>
-                        <field name ="date_end"/>
+                        <field name ="driver_license" readonly="state != 'draft'" string="Driver License Number"/>
+                        <field name ="car_id" readonly="state != 'draft'" string="Car"/>
+                        <field name ="date_start" readonly="state != 'draft'" string="Start Date"/>
+                        <field name ="date_end" readonly="state != 'draft'" string="End Date"/>
                         <field name = "duration"/>
                     </group>
                     <notebook>
@@ -41,9 +42,9 @@
                             <field name="extra_charge_ids"/>
                         </page>
                     </notebook>
-                    <button name = "action_hand_over" type = "object" string = "Hand Over"/> <!-- add car status-->
-                    <button name = "action_return_car" type = "object" string = "Return Car"/>
-                    <button name = "action_generate_invoice" type = "object" string = "Generate Invoice"/>
+                    <button name = "action_hand_over" type = "object" string = "Hand Over" invisible = "state != 'draft'" /> <!-- add car status-->
+                    <button name = "action_return_car" type = "object" string = "Return Car" invisible = "state != 'ongoing'" />
+                    <button name = "action_generate_invoice" type = "object" string = "Generate Invoice" invisible = "state != 'returned'" />
                 </sheet>
                 <chatter />
             </form>
@@ -54,10 +55,10 @@
         <field name="name">driveflow.agreement.kanban</field>
         <field name="model">driveflow.agreement</field>
         <field name="arch" type="xml">
-            <kanban>
-                <templates default_group="driveflow_car_id">
-                    <field name="customer_id"/>
-                    <field name="state"/>
+            <kanban default_group_by="state">
+                <field name="customer_id"/>
+                <field name="state"/>
+                <templates>
                     <t t-name="card">
                         <field name = "customer_id"/>
                         <field name="car_id"/>

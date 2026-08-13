@@ -6,9 +6,9 @@ class DriveflowAgreement(models.Model):
     _description        = "Drive Flow Agreements"
     _inherit            = ["mail.thread", "mail.activity.mixin"]
 
-    #name                = fields.Char(required=True)
+    name                = fields.Char(required=True, default="New Agreement")
     customer_id         = fields.Many2one("res.partner", string="Customer", required = True)
-    driver_license      = fields.Char(related="customer_id.driver_license", string="Driver License", readonly=True, store=True)
+    driver_license      = fields.Integer(string="Driver License", required=True)
     car_id              = fields.Many2one(
                             "driveflow.car", string="Car",
                             domain=[("status", "=", "available")],
@@ -30,12 +30,19 @@ class DriveflowAgreement(models.Model):
     def _compute_duration(self):
         for record in self:
             if record.date_start and record.date_end:
-                record.duration = (record.date_end - record.date_start).days #Add + 1 day
+                record.duration = (record.date_end - record.date_start).days + 1
             else:
-                record.duration = 0
+                record.duration = 1
+            if record.duration <= 0:
+                record.date_end = record.date_start
+                raise UserError("End date cannot be before start date.")
 
     def action_hand_over(self):
         for record in self:
+            if record.date_start < fields.Date.today():
+                raise UserError("You cannot hand over a car before the start date.")
+            if record.date_start > record.date_end:
+                raise UserError("End date cannot be before start date.")
             if record.state != "draft":
                 raise UserError("Only draft agreements can be handed over.")
             if record.car_id.status != "available":
