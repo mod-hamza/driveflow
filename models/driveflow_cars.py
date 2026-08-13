@@ -1,17 +1,21 @@
 from odoo import models, fields, api
 
-class EstatePropertyType(models.Model):
-    _name = "estate.property.type"
-    _description = "Property Types"
+class DriveflowCar(models.Model):
+    _name        = "driveflow.car"
+    _description = "Drive Flow Cars"
 
-    name = fields.Char(required=True)
+    name            = fields.Char(required=True)
+    car_type_id     = fields.Many2one("driveflow.car.type", string="Car Type")
+    status          = fields.Selection([
+                        ("available", "Available"),
+                        ("rented", "Rented"),
+                        ("maintenance", "In Maintenance"),
+                    ], string="Status", default="available")
+    rental_rate     = fields.Float(string="Rental Rate (per day)")
+    agreement_ids   = fields.One2many("driveflow.agreement", "car_id")
+    agreement_count = fields.Integer(compute="_compute_agreement_count")
 
-    _check_unique_name = models.Constraint("UNIQUE(name)", "Property type name must be unique.")
-
-    offer_ids = fields.One2many("estate.property.offer", "property_type_id")
-    offer_count = fields.Integer(compute="_compute_offer_count")
-
-    @api.depends('offer_ids')
-    def _compute_offer_count(self):
+    @api.depends("agreement_ids")
+    def _compute_agreement_count(self):
         for record in self:
-            record.offer_count = len(record.offer_ids)
+            record.agreement_count = len(record.agreement_ids)

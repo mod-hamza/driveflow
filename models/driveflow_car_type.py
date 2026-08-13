@@ -1,10 +1,11 @@
 from odoo import models, fields, api
 
-class EstatePropertyTag(models.Model):
-    _name = "estate.property.tag"
-    _description = "Real Estate Property Tags"
+class DriveflowCarType(models.Model):
+    _name = "driveflow.car.type"
+    _description = "Drive Flow Car Types"
 
     name = fields.Char(required=True)
-    color = fields.Integer("Color")
+    car_ids = fields.One2many("driveflow.car", "car_type_id")
 
-    _check_unique_name = models.Constraint("UNIQUE(name)", "Property tag name must be unique.")
+    _check_unique_name = models.Constraint("UNIQUE(name)", "Car type name must be unique.")
+    #SUV, Sedan, Hatchback, Limousine, Convertible, Coupe, Wagon, Van, Pickup Truck, Sports Car
