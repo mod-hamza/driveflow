@@ -1,11 +1,14 @@
 <odoo>
-    <menuitem id="estate_menu_root" name="Real Estate">
-        <menuitem id="estate_first_level_menu" name="Property Settings">
-            <menuitem id="estate_model_menu_action" action="estate_property_action"/>
-        </menuitem>
-        <menuitem id="estate_type_first_level_menu" name="Settings">
-            <menuitem id="estate_type_model_menu_action" action="estate_property_type_action"/>
-            <menuitem id="estate_tag_model_menu_action" action="estate_property_tag_action"/>
-        </menuitem>
-    </menuitem>
+    <menuitem id="driveflow_menu_root" name="Drive Flow" sequence="10"/>
+
+    <menuitem id="driveflow_fleet_menu"
+              name="Fleet"
+              parent="driveflow_menu_root"
+              sequence="10"/>
+
+    <menuitem id="driveflow_car_menu"
+              name="Cars"
+              parent="driveflow_fleet_menu"
+              action="driveflow_car_action"
+              sequence="10"/>
 </odoo>

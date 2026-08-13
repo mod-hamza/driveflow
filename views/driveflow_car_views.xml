@@ -1,37 +1,54 @@
 <odoo>
-    <record id="estate_property_type_action" model="ir.actions.act_window">
-        <field name="name">Property Types</field>
-        <field name="res_model">estate.property.type</field>
-        <field name="view_mode">list,form</field>
+    <record id="driveflow_car_view_list" model="ir.ui.view">
+        <field name="name">driveflow.car.list</field>
+        <field name="model">driveflow.car</field>
+        <field name="arch" type="xml">
+            <list decoration-success="status == 'available'"
+                  decoration-warning="status == 'rented'"
+                  decoration-muted="status == 'maintenance'">
+                <field name="name"/>
+                <field name="car_type_id"/>
+                <field name="rental_rate"/>
+                <field name="status" widget="badge"/>
+            </list>
+        </field>
     </record>
 
-    <record id="estate_property_type_view_form" model="ir.ui.view">
-        <field name="name">estate.property.type.form</field>
-        <field name="model">estate.property.type</field>
+    <record id="driveflow_car_view_form" model="ir.ui.view">
+        <field name="name">driveflow.car.form</field>
+        <field name="model">driveflow.car</field>
         <field name="arch" type="xml">
-            <form>
+            <form string="Car">
                 <sheet>
-                    <div class = "oe_button_box" name = "button_box">
-                        <button name="estate.estate_property_offer_action" type="action" class="btn-primary" icon="fa-tags">
-                            <field name="offer_count" widget="statinfo" string="Offers"/>
-                        </button>
-                    </div>
+                    <widget name="web_ribbon" title="Rented" bg_color="text-bg-warning"
+                            invisible="status != 'rented'"/>
+                    <widget name="web_ribbon" title="Maintenance" bg_color="text-bg-secondary"
+                            invisible="status != 'maintenance'"/>
                     <h1>
-                        <field name="name"/>
+                        <field name="name" placeholder="e.g. Toyota Corolla - ABC 123"/>
                     </h1>
+                    <group>
+                        <group>
+                            <field name="car_type_id"/>
+                            <field name="rental_rate"/>
+                        </group>
+                        <group>
+                            <field name="status"/>
+                            <field name="agreement_count" readonly="1"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="estate_property_type_view_list" model="ir.ui.view">
-        <field name="name">estate.property.type.list</field>
-        <field name="model">estate.property.type</field>
-        <field name="arch" type="xml">
-            <list>
-                <field name="name"/>
-            </list>
+    <record id="driveflow_car_action" model="ir.actions.act_window">
+        <field name="name">Cars</field>
+        <field name="res_model">driveflow.car</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Add your first rental car</p>
+            <p>Track each car's type, daily rate, and current availability.</p>
         </field>
     </record>
-
 </odoo>

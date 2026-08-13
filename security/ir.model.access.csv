@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+access_driveflow_car_user,driveflow.car user,model_driveflow_car,base.group_user,1,1,1,1
+access_driveflow_car_type_user,driveflow.car.type user,model_driveflow_car_type,base.group_user,1,1,1,1
+access_driveflow_agreement_user,driveflow.agreement user,model_driveflow_agreement,base.group_user,1,1,1,1
+access_driveflow_extra_charge_user,driveflow.extra.charge user,model_driveflow_extra_charge,base.group_user,1,1,1,1
