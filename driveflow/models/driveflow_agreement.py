@@ -6,8 +6,9 @@ class DriveflowAgreement(models.Model):
     _description        = "Drive Flow Agreements"
     _inherit            = ["mail.thread", "mail.activity.mixin"]
 
-    name                = fields.Char(required=True)
-    customer_id         = fields.Many2one("res.partner", string="Customer", required=True)
+    #name                = fields.Char(required=True)
+    customer_id         = fields.Many2one("res.partner", string="Customer", required = True)
+    driver_license      = fields.Char(related="customer_id.driver_license", string="Driver License", readonly=True, store=True)
     car_id              = fields.Many2one(
                             "driveflow.car", string="Car",
                             domain=[("status", "=", "available")],
@@ -15,7 +16,7 @@ class DriveflowAgreement(models.Model):
     date_start          = fields.Date(string="Start Date", required=True)
     date_end            = fields.Date(string="End Date", required=True)
     duration            = fields.Integer(compute="_compute_duration")
-    salesperson_id      = fields.Many2one("res.user", string="Agent", default=lambda self: self.env.user)
+    #salesperson_id      = fields.Many2one("res.user", string="Agent", default=lambda self: self.env.user)
     extra_charge_ids    = fields.One2many("driveflow.extra.charge", "agreement_id", string="Extra Charges")
     state               = fields.Selection([
                             ("draft", "Draft"),
@@ -23,14 +24,13 @@ class DriveflowAgreement(models.Model):
                             ("returned", "Returned"),
                             ("invoiced", "Invoiced"),
                         ], default="draft")
-    invoice_id          = fields.Many2one("account.move", string="Invoice", readonly=True)
 
     # Used AI for this
     @api.depends("date_start", "date_end")
     def _compute_duration(self):
         for record in self:
             if record.date_start and record.date_end:
-                record.duration = (record.date_end - record.date_start).days
+                record.duration = (record.date_end - record.date_start).days #Add + 1 day
             else:
                 record.duration = 0
 
@@ -57,28 +57,4 @@ class DriveflowAgreement(models.Model):
             for charge in record.extra_charge_ids:
                 if not charge.description:
                     raise UserError("Every extra charge must have a description.")
-            record._generate_invoice()
             record.state = "invoiced"
-
-    def _generate_invoice(self):
-        for record in self:
-            lines = [fields.Command.create({
-                "name": f"{record.car_id.name} rental ({record.duration} days)",
-                "quantity": record.duration,
-                "price_unit": record.car_id.rental_rate,
-            })]
-            for charge in record.extra_charge_ids:
-                lines.append(fields.Command.create({
-                    "name": charge.description,
-                    "quantity": 1,
-                    "price_unit": charge.amount,
-                }))
-            record.invoice_id = self.env["account.move"].create({
-                "partner_id": record.customer_id.id,
-                "move_type": "out_invoice",
-                "invoice_line_ids": lines,
-            })
-
-    def action_view_invoice(self):
-        self.ensure_one()
-        return self.invoice_id.get_formview_action()

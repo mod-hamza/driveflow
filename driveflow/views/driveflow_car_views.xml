@@ -1,25 +1,25 @@
 <odoo>
     <record id="driveflow_car_action" model="ir.actions.act_window">
         <field name="name">DriveFlow Cars</field>
-        <field name="res_model">driveflow.cars</field>
+        <field name="res_model">driveflow.car</field>
         <field name="view_mode">list,form</field>
     </record>
 
     <record id="driveflow_car_view_form" model="ir.ui.view">
         <field name="name">driveflow.car.form</field>
-        <field name="model">driveflow.car.type</field>
+        <field name="model">driveflow.car</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
-                    <div class = "oe_button_box" name = "button_box">
+                    <!--<div class = "oe_button_box" name = "button_box">
                         <button name="estate.estate_property_offer_action" type="action" class="btn-primary" icon="fa-tags">
                             <field name="offer_count" widget="statinfo" string="Offers"/>
                         </button>
-                    </div>
+                    </div>-->
                     <h1>
-                        <field name="car_make"/>
-                        <field name = "car_model"/>
-                        <field name = "car_year"/>
+                        <field name="name"/>
+                        <field name = "car_type_id"/>
+                        <field name = "rental_rate"/>
                     </h1>
                 </sheet>
             </form>
@@ -28,15 +28,16 @@
 
     <record id="driveflow_car_view_list" model="ir.ui.view">
         <field name="name">driveflow.car.list</field>
-        <field name="model">driveflow.car.type</field>
+        <field name="model">driveflow.car</field>
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
-                <field name = "car_model"/>
-                <field name = "car_year"/>
-                <button name="in_maintainance" string="Put in Maintainance" type="object" invisible="state in ('in_maintainance', 'rented')"/>
-                <button name="out_maintainance" string="Put out Maintainance" type="object" invisible="state == 'in_maintainance'"/>
-                <field name = "state" /> <!-- "Free", "Rented", "In Maintenance"-->
+                <field name = "car_type_id"/>
+                <field name = "rental_rate"/>
+                <field name = "agreement_count"/>
+                <button name="action_car_maintainance" string="Put in Maintainance" type="object" />
+                <button name="action_car_available" string="Make Available" type="object" />
+                <field name = "status" /> <!-- "Free", "Rented", "In Maintenance"-->
             </list>
         </field>
     </record>

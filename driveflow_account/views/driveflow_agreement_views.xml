@@ -1,0 +1,19 @@
+<odoo>
+    <record id="driveflow_agreement_view_form_inherit" model="ir.ui.view">
+        <field name="name">driveflow.agreement.form.inherit</field>
+        <field name="model">driveflow.agreement</field>
+        <field name="inherit_id" ref="driveflow.driveflow_agreement_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr = "//form/sheet" position = "inside">
+                <div class = "oe_button_box" name = "button_box">
+                    <button name = "action_view_invoice"
+                        type = "object"
+                        class = "oe_stat_button"
+                        string = "Invoice"
+                        icon = "fa-dollar"
+                        invisible = "invoice_id == False"></button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

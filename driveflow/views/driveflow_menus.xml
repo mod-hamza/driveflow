@@ -3,6 +3,7 @@
         <menuitem id="driveflow_menu" name="Settings">
             <menuitem id="driveflow_agreement_menu_action" action="driveflow_agreement_action"/>
             <menuitem id="driveflow_car_menu_action" action="driveflow_car_action"/>
+            <menuitem id="driveflow_car_type_menu_action" action = "driveflow_car_type_action"/>
         </menuitem>
     </menuitem>
 </odoo>

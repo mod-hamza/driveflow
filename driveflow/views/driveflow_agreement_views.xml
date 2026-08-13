@@ -10,29 +10,26 @@
         <field name="model">driveflow.agreement</field>
         <field name="arch" type="xml">
             <list>
-                <field name ="name"/>
-                <field name ="car"/>
-                <field name ="date_rented"/>
+                <field name ="customer_id"/>
+                <field name ="car_id"/>
+                <field name ="date_start"/>
             </list>
         </field>
     </record>
 
-    <record id="estate_property_view_form" model="ir.ui.view">
+    <record id="driveflow_agreement_view_form" model="ir.ui.view">
         <field name="name">driveflow.agreement.form</field>
         <field name="model">driveflow.agreement</field>
         <field name="arch" type="xml">
             <form>
                 <header>
-                <!--    <button name="sell_property" type="object" string="Sell" invisible="state in ('sold', 'cancelled')"/>
-                    <button name="cancel_property" type="object" string="Cancel" invisible="state in ('sold', 'cancelled')"/> -->
                     <field name="state" widget="statusbar" statusbar_visible="draft,ongoing,returned,invoiced" />
-                <!--<widget name="web_ribbon" title="Cancelled" bg_color="bg-danger" invisible="state != 'cancelled'"/>-->
                 </header>
                 <sheet>
                     <h1>
-                        <field name ="name"/>
+                        <!--<field name ="name"/>-->
+                        <field name = "customer_id"/>
                     </h1>
-                    <!--<field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>-->
                     <group>
                         <field name ="car_id"/>
                         <field name ="date_start"/>
@@ -44,9 +41,9 @@
                             <field name="extra_charge_ids"/>
                         </page>
                     </notebook>
-                    <button name = "action_hand_over" type = "object" string = "Hand Over" invisible = "state != 'draft' "> <!-- add car status-->
-                    <button name = "action_return_car" type = "object" string = "Return Car" invisible = "state != returned">
-                    <button name = "action_generate_invoice" type = "object" string = "Generate Invoice" invisible = "state != invoiced">
+                    <button name = "action_hand_over" type = "object" string = "Hand Over"/> <!-- add car status-->
+                    <button name = "action_return_car" type = "object" string = "Return Car"/>
+                    <button name = "action_generate_invoice" type = "object" string = "Generate Invoice"/>
                 </sheet>
                 <chatter />
             </form>
@@ -59,18 +56,13 @@
         <field name="arch" type="xml">
             <kanban>
                 <templates default_group="driveflow_car_id">
-                    <field name="name"/>
+                    <field name="customer_id"/>
                     <field name="state"/>
                     <t t-name="card">
+                        <field name = "customer_id"/>
                         <field name="car_id"/>
-                        <field name="rent_date"/>
+                        <field name="date_start"/>
                         <field name="state"/>
-                        <!--<t t-if="record.state.raw_value == 'offer_accepted' or record.state.raw_value == 'sold'">
-                            <div>
-                                <span> Selling Price</span>
-                                <field name="selling_price"/>
-                            </div>
-                        </t>-->
                     </t>
                 </templates>
             </kanban>
