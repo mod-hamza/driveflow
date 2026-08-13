@@ -1,13 +1,13 @@
 <odoo>
-    <record id="estate_property_type_action" model="ir.actions.act_window">
-        <field name="name">Property Types</field>
-        <field name="res_model">estate.property.type</field>
+    <record id="driveflow_car_action" model="ir.actions.act_window">
+        <field name="name">DriveFlow Cars</field>
+        <field name="res_model">driveflow.cars</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <record id="estate_property_type_view_form" model="ir.ui.view">
-        <field name="name">estate.property.type.form</field>
-        <field name="model">estate.property.type</field>
+    <record id="driveflow_car_view_form" model="ir.ui.view">
+        <field name="name">driveflow.car.form</field>
+        <field name="model">driveflow.car.type</field>
         <field name="arch" type="xml">
             <form>
                 <sheet>
@@ -17,19 +17,26 @@
                         </button>
                     </div>
                     <h1>
-                        <field name="name"/>
+                        <field name="car_make"/>
+                        <field name = "car_model"/>
+                        <field name = "car_year"/>
                     </h1>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <record id="estate_property_type_view_list" model="ir.ui.view">
-        <field name="name">estate.property.type.list</field>
-        <field name="model">estate.property.type</field>
+    <record id="driveflow_car_view_list" model="ir.ui.view">
+        <field name="name">driveflow.car.list</field>
+        <field name="model">driveflow.car.type</field>
         <field name="arch" type="xml">
             <list>
                 <field name="name"/>
+                <field name = "car_model"/>
+                <field name = "car_year"/>
+                <button name="in_maintainance" string="Put in Maintainance" type="object" invisible="state in ('in_maintainance', 'rented')"/>
+                <button name="out_maintainance" string="Put out Maintainance" type="object" invisible="state == 'in_maintainance'"/>
+                <field name = "state" /> <!-- "Free", "Rented", "In Maintenance"-->
             </list>
         </field>
     </record>

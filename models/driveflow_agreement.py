@@ -15,7 +15,7 @@ class DriveflowAgreement(models.Model):
     date_start          = fields.Date(string="Start Date", required=True)
     date_end            = fields.Date(string="End Date", required=True)
     duration            = fields.Integer(compute="_compute_duration")
-    salesperson_id      = fields.Many2one("res.users", string="Agent", default=lambda self: self.env.user)
+    salesperson_id      = fields.Many2one("res.user", string="Agent", default=lambda self: self.env.user)
     extra_charge_ids    = fields.One2many("driveflow.extra.charge", "agreement_id", string="Extra Charges")
     state               = fields.Selection([
                             ("draft", "Draft"),
