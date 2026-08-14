@@ -1,5 +1,5 @@
-from odoo import api, models, fields
-from odoo.exceptions import UserError
+from odoo import api, models, fields, api
+from odoo.exceptions import UserError, ValidationError
 
 class DriveflowAgreement(models.Model):
     _name               = "driveflow.agreement"
@@ -16,7 +16,6 @@ class DriveflowAgreement(models.Model):
     date_start          = fields.Date(string="Start Date", required=True)
     date_end            = fields.Date(string="End Date", required=True)
     duration            = fields.Integer(compute="_compute_duration")
-    #salesperson_id      = fields.Many2one("res.user", string="Agent", default=lambda self: self.env.user)
     extra_charge_ids    = fields.One2many("driveflow.extra.charge", "agreement_id", string="Extra Charges")
     state               = fields.Selection([
                             ("draft", "Draft"),
@@ -65,3 +64,15 @@ class DriveflowAgreement(models.Model):
                 if not charge.description:
                     raise UserError("Every extra charge must have a description.")
             record.state = "invoiced"
+
+    @api.constrains("date_start", "date_end")
+    def _check_dates(self):
+        for record in self:
+            if record.date_start and record.date_end and record.date_start > record.date_end:
+                raise ValidationError("End date cannot be before start date.")
+
+            if record.date_start and record.date_start < fields.Date.today():
+                raise ValidationError("You cannot hand over a car before the start date.")
+
+            if record.date_end and record.date_end < fields.Date.today():
+                raise ValidationError("End date cannot be in the past.")
